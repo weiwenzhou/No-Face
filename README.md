@@ -1,5 +1,4 @@
 # No-Face: Wei Wen Zhou, Puneet Johal, Vincent Lin, Stefan Tan
-![Image of No-Face](https://res.cloudinary.com/teepublic/image/private/s--0iYC2VuG--/t_Preview/b_rgb:484849,c_limit,f_jpg,h_630,q_90,w_630/v1491409064/production/designs/1393243_1.jpg = 40x40)
 ##
 ## Description of Dataset
 We would be using a dataset of population of countries from 1800 to 2100. By representing this data, we could easily study the demographics and the ongoing trend of human population in each country. 
