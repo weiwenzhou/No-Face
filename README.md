@@ -10,8 +10,8 @@ There would be diagrams that are labeled of each country. Users could click on a
 Our project would be similar to [this](https://bl.ocks.org/mbostock/2206590). We will have the enlargening feature when a user clicks on a country to display information on that country. When the user changes the year by using the slider the data will updated and show the population compared to the previous or next years. Users would be able to return to the map of the countries and look at the data for another country by clicking on it.  
 
 ## Sketch
-![sketch1](sketch_(1).PNG)
-![sketch2](sketch_(2).PNG)
+![sketch1](sketch1.png)
+![sketch2](sketch2.png)
 
 ## LAUNCH CODES
 1. Open a terminal session.
