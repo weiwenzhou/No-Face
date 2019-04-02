@@ -7,7 +7,7 @@ var HEIGHT;
 var margin; // dictionary
 
 // OPEN DATA
-d3.csv(data_link function(table) {
+d3.csv(data_link, function(table) {
     // Format data here
 }).then(function(data) {
     // Put stuff here
@@ -26,6 +26,6 @@ d3.csv(data_link function(table) {
 
 
     // Transition
-    
+
 
 });
