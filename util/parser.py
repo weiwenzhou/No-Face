@@ -29,8 +29,10 @@ excluded = sorted(excluded)
 print (len(names))
 print (names)
 print ("===========================================")
+print(len(excluded))
 print(excluded)
 print (names.index("Central African Rep."))
 # Notes
 # two congos in population
-# ["Bahrain", "Holy See", "Kiribati", "Marshall Island", "Micronesia", "Monaco", "Samoa", "San Marino", "Sao Tome and Principe", "St. Lucia", "Tuvalu"]
+a = ["Bahrain", "Holy See", "Kiribati", "Marshall Island", "Micronesia", "Monaco", "Samoa", "San Marino", "Sao Tome and Principe", "St. Lucia", "Tuvalu"]
+print(len(a))
