@@ -39,3 +39,30 @@ puneetJ -- 2019-04-02 01:17
 - Updated sketch according to suggestions given by others
 during the review phase
 ==============================================================
+weiwenZ -- 2019-04-02 07:25
+--------------------------------------------------------------
+- added world.svg
+- put world.svg in index.html as an object
+- created parser to parse through to world.svg to get list of
+countries drawn
+==============================================================
+weiwenZ -- 2019-04-02 13:25
+--------------------------------------------------------------
+- parse through csv data to compare alongside the svg map
+* FINDINGS *
+- there are confirm 19 countries that exist on the map but are
+given a different name on svg map when compare to the population
+data
+- there are currently 11 countries in our csv file that are
+not represented on the map. Reasons included a weird name vs.
+svg map or just isn't included on the map
+==============================================================
+weiwenZ -- 2019-04-02 20:25
+--------------------------------------------------------------
+- CROS error when reading csv file with js.
+* DISCOVERIES *
+- the relative path in external javascript file are relative to
+page loading the js file rather than the location of js file...
+- AVOID THE ISSUE WITH FLASK IMPLEMENTATION
+    - using send_file
+==============================================================

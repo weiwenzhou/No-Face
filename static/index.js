@@ -7,11 +7,15 @@ var HEIGHT;
 var margin; // dictionary
 
 // OPEN DATA
-d3.csv(data_link, function(table) {
+d3.csv("data/population.csv", function(table) {
     // Format data here
+    console.log("a");
+    return {
+        name : table.name
+    }
 }).then(function(data) {
     // Put stuff here
-
+    console.log(data[0]);
     // SCALE POPULATION to display an appropriate amount of people
     var p_scale;
 
