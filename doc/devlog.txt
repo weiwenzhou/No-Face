@@ -66,3 +66,10 @@ page loading the js file rather than the location of js file...
 - AVOID THE ISSUE WITH FLASK IMPLEMENTATION
     - using send_file
 ==============================================================
+weiwenZ -- 2019-04-03 7:15
+--------------------------------------------------------------
+- Can't seem to get a label in the center of path (alternatives
+change to a choropleth map)
+- Created a PLACEHOLDER for the year
+- Created a graph of us data for demo purposes.
+==============================================================
