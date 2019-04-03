@@ -30,7 +30,7 @@ d3.csv("data/population.csv", function(table) {
             .attr("y", 100)
             .text("year");
     console.log(label);
-    
+
     // Create a timeline (1800 - 2100)
     var label = d3.select("svg").append("text")
             .attr("text-anchor", "middle")
@@ -75,13 +75,28 @@ d3.csv("data/population.csv", function(table) {
     dlist = d3.entries(data[0]);
     console.log(dlist);
 
-    graph.selectAll("circle").data(dlist).enter().append("circle")
-        .attr("cx", function(d) { return x_scale(d.key);})
-        .attr("cy", function(d) { return y_scale(reduce(d.value));})
-        .attr("transform", "translate(60, 0)")
-        .attr("r", 1)
-        .attr("fill", "black");
+    // graph.selectAll("circle").data(dlist).enter().append("circle")
+    //     .attr("cx", function(d) { return x_scale(d.key);})
+    //     .attr("cy", function(d) { return y_scale(reduce(d.value));})
+    //     .attr("transform", "translate(60, 0)")
+    //     .attr("r", 1)
+    //     .attr("fill", "black");
 
-
+    var year = 1800
+    var y_label = graph.append("text").text(year).attr("transform", "translate(200, 100)");
+    var timer = d3.interval(function(elapsed) {
+        graph.append("circle")
+            .attr("cx", function(d) { return x_scale(year);})
+            .attr("cy", function(d) { return y_scale(reduce(data[0][year.toString()]));})
+            .attr("transform", "translate(60, 0)")
+            .attr("r", 1)
+            .attr("fill", "black");
+        y_label.text(year);
+        year = year + 1;
+        // console.log(1,year.toString(),2);
+        if (year > 2100) {
+            timer.stop()
+        }
+    }, 200);
 
 });
