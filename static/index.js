@@ -5,6 +5,7 @@ var data_link;
 var WIDTH;
 var HEIGHT;
 var margin; // dictionary
+var lastSelected; //last selected country
 
 // OPEN DATA
 d3.csv("data/population.csv", function(table) {
@@ -43,6 +44,29 @@ d3.csv("data/population.csv", function(table) {
 
 
     // Transition
+
+
+    //Darkening the outline of the country
+    d3.select("svg").selectAll("path")
+      .on("click", function() {
+        d3.select(this).attr("style", "stroke-width:6");
+        console.log('Country selected');
+        if (lastSelected != this) {
+          d3.select(lastSelected).attr("style", "stroke-width:1");
+        }
+        lastSelected = this;
+      })
+
+    // var countries = d3.select("svg").selectAll("path").data(data).enter().append("path")
+    //   .on("click", function() {
+    //     d3.select(this).attr("style", "stroke-width:6");
+    //     console.log('Country selected');
+    //     if (lastSelected != this) {
+    //       d3.select(lastSelected).attr("style", "stroke-width:1");
+    //     }
+    //     lastSelected = this;
+    //   }).exit().remove();
+
 
 
     // Temp Line graph
