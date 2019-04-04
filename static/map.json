@@ -1,4 +1,4 @@
-jQuery.fn.vectorMap('addMap', 'world_wle5_en', {
+var map_json = {
     "insets": [{
         "width": 900.0,
         "top": 0,
@@ -828,4 +828,4 @@ jQuery.fn.vectorMap('addMap', 'world_wle5_en', {
         "centralMeridian": 11.5
     },
     "width": 900.0
-});
+};

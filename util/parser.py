@@ -36,3 +36,5 @@ print(excluded)
 # two congos in population
 a = ["Bahrain", "Holy See", "Kiribati", "Marshall Island", "Micronesia", "Monaco", "Samoa", "San Marino", "Sao Tome and Principe", "St. Lucia", "Tuvalu"]
 print(len(a))
+
+b = ["Holy See", "Hong Kong, China", "Liechtenstein", "Montengro", "Palestine", ]
