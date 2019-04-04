@@ -82,6 +82,7 @@ d3.csv("data/population.csv", function(table) {
     //     .attr("r", 1)
     //     .attr("fill", "black");
 
+    var color_scale = d3.scaleLinear().domain([0, 500]).range([0, 1]);
     var year = 1800
     var y_label = graph.append("text").text(year).attr("transform", "translate(200, 100)");
     var timer = d3.interval(function(elapsed) {
@@ -90,13 +91,21 @@ d3.csv("data/population.csv", function(table) {
             .attr("cy", function(d) { return y_scale(reduce(data[0][year.toString()]));})
             .attr("transform", "translate(60, 0)")
             .attr("r", 1)
-            .attr("fill", "black");
+            .attr("fill", function(d) {
+                                return d3.interpolateGreens(color_scale(reduce(data[0][year.toString()])));
+                                });
         y_label.text(year);
+
+        d3.select("#US")
+            .attr("style", "fill-rule:evenodd")
+            .attr("fill", function(d) {
+                                return d3.interpolateGreens(color_scale(reduce(data[0][year.toString()])));
+                                });
         year = year + 1;
         // console.log(1,year.toString(),2);
         if (year > 2100) {
             timer.stop()
         }
-    }, 200);
+    }, 10);
 
 });
