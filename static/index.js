@@ -24,17 +24,18 @@ d3.csv("data/population.csv", function(table) {
     // Draw countries?
     // Initialize the data at 1800
     var map = d3.select('body').append("svg").attr("width", 900.0).attr("height", 440.7063107441331).style("border", "1px solid");
-    console.log(map_json.paths);
-    var mapCoords = d3.entries(map_json.paths);
-    console.log(mapCoords)
-    var countries = map.selectAll("path").data(mapCoords).enter().append("path")
-                    .attr("id", function(d) {
-                            // console.log(d.value.name);
-                            return d.value.name; })
-                    .attr("d", function(d) { return d.value.path;} )
-                    .attr("stroke", "#00ff00")
-                    .attr("fill", "#f2f2f2");
-
+    d3.json("data/map.json").then(function(map) {
+        console.log(map_json.paths);
+        var mapCoords = d3.entries(map_json.paths);
+        console.log(mapCoords)
+        var countries = map.selectAll("path").data(mapCoords).enter().append("path")
+                        .attr("id", function(d) {
+                                // console.log(d.value.name);
+                                return d.value.name; })
+                        .attr("d", function(d) { return d.value.path;} )
+                        .attr("stroke", "#00ff00")
+                        .attr("fill", "#f2f2f2");
+    });
     // Create a timeline (1800 - 2100)
     var label = d3.select("svg").append("text")
             .attr("text-anchor", "middle")
@@ -127,5 +128,5 @@ d3.csv("data/population.csv", function(table) {
 	.on("mouseover", function(){return tooltip.style("visibility", "visible");})
 	.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
 	.on("mouseout", function(){return tooltip.style("visibility", "hidden");})
-    
+
 });
