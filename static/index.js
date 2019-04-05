@@ -103,8 +103,8 @@ d3.csv("data/population.csv", function(table) {
         d3.select("#US")
             .attr("style", "fill-rule:evenodd")
             .attr("fill", function(d) {
-                                return d3.interpolateGreens(color_scale(reduce(data[0][year.toString()])));
-                                });
+                return d3.interpolateGreens(color_scale(reduce(data[0][year.toString()])));
+            });
         year = year + 1;
         // console.log(1,year.toString(),2);
         if (year > 2100) {
@@ -112,4 +112,20 @@ d3.csv("data/population.csv", function(table) {
         }
     }, 10);
 
+    //TEMP TOOLTIP
+    var tooltip = d3.select("body")
+	.append("div")
+	.style("position", "absolute")
+	.style("z-index", "10")
+	.style("visibility", "hidden")
+	.style("background", "lightsteelblue")
+	.style("padding", "2px")
+	.style("border-radius", "10px")
+	.text("Population: " + data[0][year.toString()]);
+
+    d3.select("#US")
+	.on("mouseover", function(){return tooltip.style("visibility", "visible");})
+	.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+	.on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+    
 });
