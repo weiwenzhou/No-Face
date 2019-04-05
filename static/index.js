@@ -82,7 +82,8 @@ d3.csv("data/population.csv", function(table) {
                                 return d.population.name; })
                         .attr("d", function(d) { return d.path;} )
                         .attr("stroke", "#f2f2f2")
-                        .attr("fill", "#f2f2f2");
+                        .attr("fill", "#f2f2f2")
+                        .on("mouseover", mouseover)
     });
     // Create a timeline (1800 - 2100)
     var label = d3.select("svg").append("text")
@@ -125,6 +126,7 @@ d3.csv("data/population.csv", function(table) {
     // Title
     graph.append("text").text("Population for the U.S. from 1800-2100").attr("transform", "translate(200, 50)");
 
+
     // Plotting points + animation of map (temp)
     var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range(0,500);
     var color_scale = d3.scaleLinear().domain([0, 500]).range([1, 0]);
@@ -143,7 +145,11 @@ d3.csv("data/population.csv", function(table) {
 
         map.selectAll("path").attr("fill", function(d) {
             return d3.interpolateSpectral(color_scale(reduce(d.population[year.toString()])));
-        });
+        })
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseout", mouseout);
+
 
 
         d3.select("#US")
@@ -151,10 +157,11 @@ d3.csv("data/population.csv", function(table) {
             .attr("fill", function(d) {
                 return d3.interpolateGreens(color_scale(reduce(data[0][year.toString()])));
             });
-        year = year + 1;
         // console.log(1,year.toString(),2);
-        if (year > 2100) {
+        if (year >= 2100) {
             timer.stop()
+        } else {
+            year = year + 1;
         }
     }, 10);
 
@@ -173,5 +180,20 @@ d3.csv("data/population.csv", function(table) {
 	.on("mouseover", function(){return tooltip.style("visibility", "visible");})
 	.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
 	.on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+
+    var mouseover = function() {
+        console.log(this.__data__.population[year.toString()], year);
+        tooltip.style("visibility", "visible");
+    };
+
+    var mousemove = function() {
+        tooltip.text(this.__data__.population[year.toString()])
+        .style("top", (event.pageY-10)+"px")
+        .style("left",(event.pageX+10)+"px");
+    };
+
+    var mouseout = function() {
+        tooltip.style("visibility", "hidden");
+    };
 
 });
