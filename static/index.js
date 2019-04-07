@@ -6,6 +6,7 @@ var WIDTH;
 var HEIGHT;
 var margin; // dictionary
 var lastSelected; //last selected country
+var centered;
 
 // OPEN DATA
 d3.csv("data/population.csv", function(table) {
@@ -85,6 +86,16 @@ d3.csv("data/population.csv", function(table) {
                         .attr("stroke", "#f2f2f2")
                         .attr("fill", "#f2f2f2")
                         .on("mouseover", mouseover)
+                        .on("click", function() {
+                          d3.select(this)
+                            .attr("stroke-width", "3");
+                          console.log("Country selected");
+                          if (lastSelected != this) {
+                            d3.select(lastSelected)
+                              .attr("stroke-width", "1");
+                          }
+                          lastSelected = this;
+                        })
     });
     // Create a timeline (1800 - 2100)
     var label = d3.select("svg").append("text")
@@ -98,28 +109,6 @@ d3.csv("data/population.csv", function(table) {
 
 
     // Transition
-
-
-    //Darkening the outline of the country
-    d3.select("svg").selectAll("path")
-      .on("click", function() {
-        d3.select(this).attr("style", "stroke-width:6");
-        console.log('Country selected');
-        if (lastSelected != this) {
-          d3.select(lastSelected).attr("style", "stroke-width:1");
-        }
-        lastSelected = this;
-      })
-
-    // var countries = d3.select("svg").selectAll("path").data(data).enter().append("path")
-    //   .on("click", function() {
-    //     d3.select(this).attr("style", "stroke-width:6");
-    //     console.log('Country selected');
-    //     if (lastSelected != this) {
-    //       d3.select(lastSelected).attr("style", "stroke-width:1");
-    //     }
-    //     lastSelected = this;
-    //   }).exit().remove();
 
 
 
