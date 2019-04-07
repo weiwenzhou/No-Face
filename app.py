@@ -12,6 +12,10 @@ def index():
 def download_file():
     return send_file(os.path.join(os.getcwd(), 'data/population.csv'), attachment_filename='population.csv')
 
+@app.route('/data/map.json')
+def give_map():
+    return send_file(os.path.join(os.getcwd(), 'data/map.json'), attachment_filename='map.json')
+
 if __name__ == "__main__":
     app.debug = True
     app.run(host="0.0.0.0")

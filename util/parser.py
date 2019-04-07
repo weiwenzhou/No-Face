@@ -1,13 +1,13 @@
 import csv
 # World Map
-f = open("../static/world.svg")
+f = open("../file.js")
 lines = f.readlines()
 names = []
 c = 0
 while c < len(lines):
     line = lines[c].strip()
-    if "data-name" in line:
-        names.append(line[11:-1])
+    if "name" in line:
+        names.append(line[9:-2])
     c += 1
 
 print (len(names))
@@ -16,7 +16,7 @@ print (len(names))
 # Population data
 countries = []
 excluded  = []
-with open("../data/population_1800-2100.csv") as population:
+with open("../data/population.csv") as population:
     table = csv.DictReader(population)
     for row in table:
         if row['name'] in names:
@@ -31,8 +31,10 @@ print (names)
 print ("===========================================")
 print(len(excluded))
 print(excluded)
-print (names.index("Central African Rep."))
+#print (names.index("Central African Rep."))
 # Notes
 # two congos in population
 a = ["Bahrain", "Holy See", "Kiribati", "Marshall Island", "Micronesia", "Monaco", "Samoa", "San Marino", "Sao Tome and Principe", "St. Lucia", "Tuvalu"]
 print(len(a))
+
+b = ["Holy See", "Hong Kong, China", "Liechtenstein", "Montengro", "Palestine", ]

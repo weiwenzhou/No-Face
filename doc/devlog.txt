@@ -73,3 +73,7 @@ change to a choropleth map)
 - Created a PLACEHOLDER for the year
 - Created a graph of us data for demo purposes.
 ==============================================================
+stefanT -- 2019-04-04 23:43
+--------------------------------------------------------------
+- Added a work in progress tooltip to display data
+==============================================================
