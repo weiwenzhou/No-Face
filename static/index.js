@@ -78,6 +78,8 @@ d3.csv("data/population.csv", function(table) {
         })
         // console.log(combined_data);
 
+        //var bbox = map.selectAll("path").node().getBBox();
+
         var countries = map.selectAll("path").data(combined_data).enter().append("path")
                         .attr("id", function(d) {
                                 // console.log(d.value.name);
@@ -87,6 +89,7 @@ d3.csv("data/population.csv", function(table) {
                         .attr("fill", "#f2f2f2")
                         .on("mouseover", mouseover)
                         .on("click", function() {
+                          //highlight
                           d3.select(this)
                             .attr("stroke-width", "3");
                           console.log("Country selected");
@@ -95,8 +98,44 @@ d3.csv("data/population.csv", function(table) {
                               .attr("stroke-width", "1");
                           }
                           lastSelected = this;
+
+                          //zoom
+                          var bounds = this.getBBox();
+                          var x = bounds.x + bounds.width / 2;
+                          var y = bounds.y + bounds.height / 2;
+                          d3.select("body").select("svg").append("circle")
+                            .attr("cx", x.toString())
+                            .attr("cy", y.toString())
+                            .attr("r", "3");
+
+                          //console.log("center");
+                          //console.log(x.toString());
+                          //console.log(y.toString());
                         })
+
+        // console.log(countries);
+        //
+        // var centers = []
+        // var center = map.selectAll("path")
+        //   .each(function(d, i){
+        //     var bounds = this.getBBox();
+        //     labelPositions[i] = {
+        //       x: bounds.x + bounds.width / 2,
+        //       y: bounds.y + bounds.height / 2
+        //     };
+        //   });
+
+        // //for (path in map.selectAll("path")) {
+        //   var rect = d3.select("#US").data(combined_data).enter().append("rect")
+        //     .attr("x", path.getBBox().x)
+        //     .attr("y", path.getBBox().y)
+        //     .attr("width", path.getBBox().width)
+        //     .attr("height", path.getBBox().height)
+        //     .style("stroke", "#A52A2A");
+        // //}
     });
+
+
     // Create a timeline (1800 - 2100)
     var label = d3.select("svg").append("text")
             .attr("text-anchor", "middle")
