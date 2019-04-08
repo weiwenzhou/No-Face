@@ -4,9 +4,8 @@
 var width = 900.0;
 var height = 440.0;
 var margin; // dictionary
-
 var map;
-
+var graph
 var lastSelected; //last selected country
 var selected; //current selected country
 
@@ -17,11 +16,14 @@ var population = {}; // Population data
 var map_data = {}; // Map paths
 var combined_data = []; // Array of data of countries in both our data sets
 
+// Timers
+var choropleth;
+
 // Scales
-var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range(0,500);
+var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range([0,500]);
 var color_scale = d3.scaleLinear().domain([0, 500]).range([1, 0]);
 var x_scale = d3.scaleLinear().domain([1800, 2100]).range([0, 500]);
-var y_scale = d3.scaleLinear().domain([0, 500]).range([500, 0]);
+var y_scale = d3.scaleLinear().domain([0, 2000]).range([500, 0]);
 var reduce = d3.scaleLinear().domain([0, 500000000]).range([0, 500]);
 
 // OPEN DATA
@@ -74,7 +76,7 @@ d3.csv("data/population.csv", function(table) {
             .on("mouseover", mouseover)
             .on("click", function() {
                 // Make line graph visible
-                create_graph(this.__data__.population);
+
 
                 // Highlight
                 d3.select(this)
@@ -93,6 +95,9 @@ d3.csv("data/population.csv", function(table) {
                     .attr("stroke-width", "1");
                     lastSelected = this;
                     console.log("zoom in")
+
+                    create_graph(this.__data__.population);
+                    choropleth.stop();
                 }
                 else {
                     d3.select("body").select("svg").transition()
@@ -102,7 +107,9 @@ d3.csv("data/population.csv", function(table) {
                     .attr("stroke-width", "1");
                     lastSelected = null;
                     console.log("zoom out")
-                    graph.style("visibility", "hidden");
+
+                    graph.remove();
+                    d3.timerFlush();
                 }
             }); // Close of click
 
@@ -145,7 +152,7 @@ d3.csv("data/population.csv", function(table) {
 
     // Transition
     var map_year = 1800;
-    var choropleth = d3.timer(function(elapsed) {
+    choropleth = d3.timer(function(elapsed) {
         map.selectAll("path").attr("fill", function(d) {
             return d3.interpolateSpectral(color_scale(reduce(d.population[map_year.toString()])));
         })
@@ -174,15 +181,15 @@ d3.csv("data/population.csv", function(table) {
 
     // Scatter plot of a country's population change
     var create_graph = function(graph_data) {
-        var graph = d3.select("body")
+        graph = d3.select("body")
                 .append("svg")
                 .attr("width", 560)
                 .attr("height", 525)
                 .style("position", "absolute")
                 .style("z-index", "10")
                 .style("border", "2px solid")
+                .style("background", "lightsteelblue")
                 .style("visibility", "visible");
-
 
 
         // X-axis
@@ -207,19 +214,22 @@ d3.csv("data/population.csv", function(table) {
 
 
         // Plotting points
-        var year = 1800
-        var y_label = graph.append("text").text(year).attr("transform", "translate(200, 100)");
-        var timer = d3.interval(function(elapsed) {
+        year = 1800
+        y_label = graph.append("text").text(year).attr("transform", "translate(200, 100)");
+        timer = d3.interval(function(elapsed) {
             // Graphing the points
-            graph.append("circle")
+            point = graph.append("circle")
                 .attr("cx", function(d) { return x_scale(year);})
-                .attr("cy", function(d) { return y_scale(reduce(graph_data[year.toString()]));})
+                .attr("cy", function(d) { return y_scale(pop_reduce(graph_data[year.toString()]));})
                 .attr("transform", "translate(60, 0)")
                 .attr("r", 1)
                 .attr("fill", function(d) {
                     return d3.interpolateGreens(color_scale(pop_reduce(graph_data[year.toString()])));
                 });
 
+            if (year == map_year) {
+                point.attr("r", 3).attr("fill", "red");
+            }
             // Change the year label
             y_label.text(year);
 
