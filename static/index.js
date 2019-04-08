@@ -212,11 +212,11 @@ d3.csv("data/population.csv", function(table) {
             // Graphing the points
             graph.append("circle")
                 .attr("cx", function(d) { return x_scale(year);})
-                .attr("cy", function(d) { return y_scale(reduce(data[0][year.toString()]));})
+                .attr("cy", function(d) { return y_scale(reduce(graph_data[year.toString()]));})
                 .attr("transform", "translate(60, 0)")
                 .attr("r", 1)
                 .attr("fill", function(d) {
-                    return d3.interpolateGreens(color_scale(pop_reduce(data[0][year.toString()])));
+                    return d3.interpolateGreens(color_scale(pop_reduce(graph_data[year.toString()])));
                 });
 
             // Change the year label
