@@ -6,7 +6,7 @@ var WIDTH;
 var HEIGHT;
 var margin; // dictionary
 var lastSelected; //last selected country
-var centered;
+var selected; //current selected country
 
 // OPEN DATA
 d3.csv("data/population.csv", function(table) {
@@ -38,7 +38,9 @@ d3.csv("data/population.csv", function(table) {
 
     // Draw countries?
     // Initialize the data at 1800
-    var map = d3.select('body').append("svg").attr("width", 900.0).attr("height", 440.7063107441331).style("border", "1px solid");
+    var map = d3.select('body').append("svg").attr("width", 900.0).attr("height", 440.7063107441331);
+    WIDTH = 900.0;
+    HEIGHT = 440.7063107441331;
 
     // Open the json file to get lines for countries
     d3.json("data/map.json", function(error, m) {
@@ -92,57 +94,53 @@ d3.csv("data/population.csv", function(table) {
                           //highlight
                           d3.select(this)
                             .attr("stroke-width", "3");
-                          console.log("Country selected");
-                          if (lastSelected != this) {
-                            d3.select(lastSelected)
-                              .attr("stroke-width", "1");
-                          }
-                          lastSelected = this;
-
                           //zoom
                           var bounds = this.getBBox();
                           var x = bounds.x + bounds.width / 2;
                           var y = bounds.y + bounds.height / 2;
-                          d3.select("body").select("svg").append("circle")
-                            .attr("cx", x.toString())
-                            .attr("cy", y.toString())
-                            .attr("r", "3");
+                          // svg.transition()
+                          //       .duration(750)
+                          //       .call(zoom.translate([0, 0]).scale(1).event);
 
+                          //console.log("Country selected");
+                          if (lastSelected != this) {
+                            d3.select("body").select("svg").transition()
+                              .duration(750)
+                              .attr("transform", "translate(" + (WIDTH / 2 + -x + 250) + "," + (HEIGHT / 2 + -y + 100) + ")scale(" + 2 + ")");
+                            d3.select(lastSelected)
+                              .attr("stroke-width", "1");
+                            lastSelected = this;
+                            console.log("zoom in")
+                          }
+                          else {
+                            d3.select("body").select("svg").transition()
+                              .duration(750)
+                              .attr("transform", "translate(" + 0 + "," + 0 + ")scale(" + 1 + ")");
+                            d3.select(lastSelected)
+                              .attr("stroke-width", "1");
+                            lastSelected = null;
+                            console.log("zoom out")
+                          }
+
+                          // d3.select("body").select("svg").append("circle")
+                          //   .attr("cx", x.toString())
+                          //   .attr("cy", y.toString())
+                          //   .attr("r", "3");
                           //console.log("center");
                           //console.log(x.toString());
                           //console.log(y.toString());
                         })
 
-        // console.log(countries);
-        //
-        // var centers = []
-        // var center = map.selectAll("path")
-        //   .each(function(d, i){
-        //     var bounds = this.getBBox();
-        //     labelPositions[i] = {
-        //       x: bounds.x + bounds.width / 2,
-        //       y: bounds.y + bounds.height / 2
-        //     };
-        //   });
-
-        // //for (path in map.selectAll("path")) {
-        //   var rect = d3.select("#US").data(combined_data).enter().append("rect")
-        //     .attr("x", path.getBBox().x)
-        //     .attr("y", path.getBBox().y)
-        //     .attr("width", path.getBBox().width)
-        //     .attr("height", path.getBBox().height)
-        //     .style("stroke", "#A52A2A");
-        // //}
     });
 
 
     // Create a timeline (1800 - 2100)
-    var label = d3.select("svg").append("text")
-            .attr("text-anchor", "middle")
-            .attr("font-size", "40px")
-            .attr("x", 200)
-            .attr("y", 100)
-            .text("PLACEHOLDER YEAR");
+    // var label = d3.select("svg").append("text")
+    //         .attr("text-anchor", "middle")
+    //         .attr("font-size", "40px")
+    //         .attr("x", 200)
+    //         .attr("y", 100)
+    //         .text("PLACEHOLDER YEAR");
 
     // Add title
 
