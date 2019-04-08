@@ -68,7 +68,7 @@ d3.csv("data/population.csv", function(table) {
             .on("mouseover", mouseover)
             .on("click", function() {
                 // Make line graph visible
-                graph.style("visibility", "visible");
+                create_graph(this.__data__.population);
 
                 // Highlight
                 d3.select(this)
@@ -167,74 +167,68 @@ d3.csv("data/population.csv", function(table) {
         }
     }, 5);
 
-    // Temp Line graph
-    var graph = d3.select("body")
-    .append("svg")
-    .attr("width", 560)
-    .attr("height", 525)
-    .style("position", "absolute")
-    .style("z-index", "10")
-    .style("border", "2px solid")
-    .style("visibility", "hidden");
+    // Scatter plot of a country's population change
+    var create_graph = function(graph_data) {
+        var graph = map
+                .append("svg")
+                .attr("width", 560)
+                .attr("height", 525)
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("border", "2px solid")
+                .style("visibility", "hidden");
 
-    var x_scale = d3.scaleLinear().domain([1800, 2100]).range([0, 500]);
-    var y_scale = d3.scaleLinear().domain([0, 500]).range([500, 0]);
-    var reduce = d3.scaleLinear().domain([0, 500000000]).range([0, 500]);
+        var x_scale = d3.scaleLinear().domain([1800, 2100]).range([0, 500]);
+        var y_scale = d3.scaleLinear().domain([0, 500]).range([500, 0]);
+        var reduce = d3.scaleLinear().domain([0, 500000000]).range([0, 500]);
 
-    // X-axis
-    graph.append("g").call(d3.axisBottom().scale(x_scale).ticks(5))
-        .attr("transform", "translate(60, 500)");
-    // X Label
-    graph.append("text").text("Year")
-        .attr("transform", "translate(250, 520)");
+        // X-axis
+        graph.append("g").call(d3.axisBottom().scale(x_scale).ticks(5))
+            .attr("transform", "translate(60, 500)");
+        // X Label
+        graph.append("text").text("Year")
+            .attr("transform", "translate(250, 520)");
 
-    // Y-axis
-    graph.append("g").call(d3.axisLeft().scale(y_scale).ticks(5))
-        .attr("transform", "translate(60, 0)");
-    // Y Label
-    graph.append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("x", -320)
-        .attr("y", 15)
-        .text("Population (millions)");
+        // Y-axis
+        graph.append("g").call(d3.axisLeft().scale(y_scale).ticks(5))
+            .attr("transform", "translate(60, 0)");
+        // Y Label
+        graph.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -320)
+            .attr("y", 15)
+            .text("Population (millions)");
 
-    // Title
-    graph.append("text").text("Population for the U.S. from 1800-2100").attr("transform", "translate(200, 50)");
+        // Title
+        graph.append("text").text("Population for the U.S. from 1800-2100").attr("transform", "translate(200, 50)");
 
 
-    // Plotting points + animation of map (temp)
-    var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range(0,500);
-    var color_scale = d3.scaleLinear().domain([0, 500]).range([1, 0]);
-    var year = 1800
-    var y_label = graph.append("text").text(year).attr("transform", "translate(200, 100)");
-    var timer = d3.interval(function(elapsed) {
-        graph.append("circle")
-            .attr("cx", function(d) { return x_scale(year);})
-            .attr("cy", function(d) { return y_scale(reduce(data[0][year.toString()]));})
-            .attr("transform", "translate(60, 0)")
-            .attr("r", 1)
-            .attr("fill", function(d) {
-                                return d3.interpolateGreens(color_scale(pop_reduce(data[0][year.toString()])));
-                                });
-        y_label.text(year);
+        // Plotting points
+        var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range(0,500);
+        var color_scale = d3.scaleLinear().domain([0, 500]).range([1, 0]);
+        var year = 1800
+        var y_label = graph.append("text").text(year).attr("transform", "translate(200, 100)");
+        var timer = d3.interval(function(elapsed) {
+            // Graphing the points
+            graph.append("circle")
+                .attr("cx", function(d) { return x_scale(year);})
+                .attr("cy", function(d) { return y_scale(reduce(data[0][year.toString()]));})
+                .attr("transform", "translate(60, 0)")
+                .attr("r", 1)
+                .attr("fill", function(d) {
+                    return d3.interpolateGreens(color_scale(pop_reduce(data[0][year.toString()])));
+                });
 
-        d3.select("#US")
-            .attr("style", "fill-rule:evenodd")
-            .attr("fill", function(d) {
-                return d3.interpolateGreens(color_scale(reduce(data[0][year.toString()])));
-            });
-        // console.log(1,year.toString(),2);
-        if (year >= 2100) {
-            timer.stop()
-        } else {
-            year = year + 1;
-        }
-    }, 10);
+            // Change the year label
+            y_label.text(year);
 
-    d3.select("#US")
-	.on("mouseover", function(){return tooltip.style("visibility", "visible");})
-	.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-	.on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+            if (year >= 2100) {
+                timer.stop()
+            } else {
+                year = year + 1;
+            }
+        }, 100);
+    }
 
     var mouseover = function() {
         d3.select(this).select("div").style("visibility", "visible");
