@@ -1,149 +1,119 @@
 // Variables
-var data_link;
 
 // SVG Variables
-var WIDTH;
-var HEIGHT;
+var width = 900.0;
+var height = 440.0;
 var margin; // dictionary
+
+var map;
+
 var lastSelected; //last selected country
 var selected; //current selected country
+
+// Data Variables
+var population_link = "data/population.csv";
+var map_link = "data/map.json";
+var population = {}; // Population data
+var map_data = {}; // Map paths
+var combined_data = []; // Array of data of countries in both our data sets
+
 
 // OPEN DATA
 d3.csv("data/population.csv", function(table) {
     // Format data here
-    // console.log(table);
-    // if (table.name == "United States") {
     return table;
-    // }
 }).then(function(pop_data) {
     // Put stuff here
-    // console.log(data[0]);
-    // Data contains only US population data currently
-    // console.log(pop_data)
 
     // Format the population data
-    population = {};
     pop_data.forEach(function(row) {
         population[row.name] = row;
-    })
+    });
 
-    // console.log(population);
-
-    data = [population['United States']];
-    // console.log(data);
-
-
-    // SCALE POPULATION to display an appropriate amount of people
-    var p_scale;
-
-    // Draw countries?
+    // Draw countries
     // Initialize the data at 1800
-    var map = d3.select('body').append("svg").attr("width", 900.0).attr("height", 440.7063107441331);
-    WIDTH = 900.0;
-    HEIGHT = 440.7063107441331;
+    map = d3.select('body').append("svg").attr("width", width).attr("height", height);
 
     // Open the json file to get lines for countries
-    d3.json("data/map.json", function(error, m) {
-        // console.log(m);
-        // alert(error);
-        return m
+    d3.json("data/map.json", function(m) {
+        return m;
     }).then(function(map_data) {
-        // console.log(map_data)
-        // console.log(map_data.paths);
 
+        // Format the map data
         var mapCoords = d3.entries(map_data.paths);
-
-        // console.log(mapCoords)
-
-
-        map_parse = {};
         mapCoords.forEach(function(row) {
-            // console.log(row.value.path);
-            map_parse[row.value.name] = row.value.path;
-        })
+            map_data[row.value.name] = row.value.path;
+        });
 
-
-        // console.log(map_parse)
-        // console.log(Object.keys(map_parse));
-
-
-        var map_keys = Object.keys(map_parse);
-        combined_data = [];
+        // Combined the data of the two maps
+        var map_keys = Object.keys(map_data);
         pop_data.forEach(function(row) {
+            // Only included the countries in both data sets
             if (map_keys.includes(row.name)) {
-                console.log("GOOG");
                 combined_data.push({
                     'population' : row,
-                    'path' : map_parse[row.name]
+                    'path' : map_data[row.name]
                 })
             }
-        })
-        // console.log(combined_data);
+        });
 
-        //var bbox = map.selectAll("path").node().getBBox();
+        // Create the map
+        var countries = map
+        .selectAll("path").data(combined_data).enter().append("path")
+            .attr("id", function(d) {
+                    return d.population.name; })
+            .attr("d", function(d) { return d.path;} )
+            .attr("stroke", "#f2f2f2")
+            .attr("fill", "#f2f2f2")
+            .on("mouseover", mouseover)
+            .on("click", function() {
+                // Make line graph visible
+                graph.style("visibility", "visible");
 
-        var countries = map.selectAll("path").data(combined_data).enter().append("path")
-                        .attr("id", function(d) {
-                                // console.log(d.value.name);
-                                return d.population.name; })
-                        .attr("d", function(d) { return d.path;} )
-                        .attr("stroke", "#f2f2f2")
-                        .attr("fill", "#f2f2f2")
-                        .on("mouseover", mouseover)
-                        .on("click", function() {
-                            graph.style("visibility", "visible");
-                              //highlight
-                              d3.select(this)
-                                .attr("stroke-width", "3");
-                              //zoom
-                              var bounds = this.getBBox();
-                              var x = bounds.x + bounds.width / 2;
-                              var y = bounds.y + bounds.height / 2;
-                              // svg.transition()
-                              //       .duration(750)
-                              //       .call(zoom.translate([0, 0]).scale(1).event);
+                // Highlight
+                d3.select(this)
+                    .attr("stroke-width", "3");
 
-                              //console.log("Country selected");
-                              if (lastSelected != this) {
-                                d3.select("body").select("svg").transition()
-                                  .duration(750)
-                                  .attr("transform", "translate(" + (WIDTH / 2 + -x + 250) + "," + (HEIGHT / 2 + -y + 100) + ")scale(" + 2 + ")");
-                                d3.select(lastSelected)
-                                  .attr("stroke-width", "1");
-                                lastSelected = this;
-                                console.log("zoom in")
-                              }
-                              else {
-                                d3.select("body").select("svg").transition()
-                                  .duration(750)
-                                  .attr("transform", "translate(" + 0 + "," + 0 + ")scale(" + 1 + ")");
-                                d3.select(lastSelected)
-                                  .attr("stroke-width", "1");
-                                lastSelected = null;
-                                console.log("zoom out")
-                                graph.style("visibility", "hidden");
+                // Zoom
+                var bounds = this.getBBox();
+                var x = bounds.x + bounds.width / 2;
+                var y = bounds.y + bounds.height / 2;
 
-                              }
+                if (lastSelected != this) {
+                    d3.select("body").select("svg").transition()
+                    .duration(750)
+                    .attr("transform", "translate(" + (WIDTH / 2 + -x + 250) + "," + (HEIGHT / 2 + -y + 100) + ")scale(" + 2 + ")");
+                    d3.select(lastSelected)
+                    .attr("stroke-width", "1");
+                    lastSelected = this;
+                    console.log("zoom in")
+                }
+                else {
+                    d3.select("body").select("svg").transition()
+                    .duration(750)
+                    .attr("transform", "translate(" + 0 + "," + 0 + ")scale(" + 1 + ")");
+                    d3.select(lastSelected)
+                    .attr("stroke-width", "1");
+                    lastSelected = null;
+                    console.log("zoom out")
+                    graph.style("visibility", "hidden");
+                }
+            }); // Close of click
 
-                          // d3.select("body").select("svg").append("circle")
-                          //   .attr("cx", x.toString())
-                          //   .attr("cy", y.toString())
-                          //   .attr("r", "3");
-                          //console.log("center");
-                          //console.log(x.toString());
-                          //console.log(y.toString());
-                        })
-            var tooltips = countries
-        	.append("div")
-        	.style("position", "absolute")
-        	.style("z-index", "10")
-        	.style("visibility", "hidden")
-        	.style("background", "lightsteelblue")
-        	.style("padding", "2px")
-        	.style("border-radius", "10px")
-            .text("STUFF");
-            console.log(tooltips);
-    });
+    // Create the tooltips for each country
+    var tooltips = countries
+    	.append("div")
+    	.style("position", "absolute")
+    	.style("z-index", "10")
+    	.style("visibility", "hidden")
+    	.style("background", "lightsteelblue")
+    	.style("padding", "2px")
+    	.style("border-radius", "10px")
+        .text("STUFF");
+
+        console.log(tooltips);
+
+    }); // Close of json (then)
 
 
     // Create a timeline (1800 - 2100)
@@ -154,17 +124,11 @@ d3.csv("data/population.csv", function(table) {
             .attr("y", 50)
             .text("PLACEHOLDER YEAR");
 
-    // var timeline = map.append("g").call(d3.axisBottom()
-    //                 .scale([1800, 2100]).ticks(5));
-    //
-    // d3.select("svg").append(timeline)
-    //         .attr("x", 350)
-    //         .attr("y", 0);
     // Add title
 
-
-        //TEMP TOOLTIP
-        var tooltip = d3.select("body").selectAll("div").data(data).enter()
+    data = [population['United States']]
+    //TEMP TOOLTIP
+    var tooltip = d3.select("body").selectAll("div").data(data).enter()
     	.append("div")
     	.style("position", "absolute")
     	.style("z-index", "10")
