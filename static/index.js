@@ -141,6 +141,8 @@ d3.csv("data/population.csv", function(table) {
         	.style("background", "lightsteelblue")
         	.style("padding", "2px")
         	.style("border-radius", "10px")
+            .text("STUFF");
+            console.log(tooltips);
     });
 
 
@@ -182,17 +184,17 @@ d3.csv("data/population.csv", function(table) {
         .on("mousemove", mousemove)
         .on("mouseout", mouseout);
 
-        map.selectAll("path").selectAll("div")
-        .text(function(d) {
-            return d.population[map_year.toString()];
-        })
+        // map.selectAll("path").selectAll("div")
+        // .text(function(d) {
+        //     return d.population[map_year.toString()];
+        // })
         label.text(map_year);
         // if (map_year == 1800) {
             // console.log(tooltip);
         // }
-        tooltip.text(function(d) {
-            return d[map_year.toString()];
-        });
+        // tooltip.text(function(d) {
+        //     return d[map_year.toString()];
+        // });
 
         if (map_year >= 2100) {
             choropleth.stop();
@@ -206,6 +208,8 @@ d3.csv("data/population.csv", function(table) {
     .append("svg")
     .attr("width", 560)
     .attr("height", 525)
+    .style("position", "absolute")
+    .style("z-index", "10")
     .style("border", "2px solid")
     .style("visibility", "hidden");
 
@@ -269,17 +273,18 @@ d3.csv("data/population.csv", function(table) {
 	.on("mouseout", function(){return tooltip.style("visibility", "hidden");})
 
     var mouseover = function() {
-        this.select("div").style("visibility", "visible");
+        d3.select(this).select("div").style("visibility", "visible");
     };
 
     var mousemove = function() {
-        this.select("div")
+        console.log("HERE");
+        d3.select(this).select("div")
         .style("top", (event.pageY-10)+"px")
         .style("left",(event.pageX+10)+"px");
     };
 
     var mouseout = function() {
-        this.select("div").style("visibility", "hidden");
+        d3.select(this).select("div").style("visibility", "hidden");
     };
 
 });
