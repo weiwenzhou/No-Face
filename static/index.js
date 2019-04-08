@@ -174,7 +174,7 @@ d3.csv("data/population.csv", function(table) {
 
     // Scatter plot of a country's population change
     var create_graph = function(graph_data) {
-        var graph = map
+        var graph = d3.select("body")
                 .append("svg")
                 .attr("width", 560)
                 .attr("height", 525)
