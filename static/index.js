@@ -17,6 +17,12 @@ var population = {}; // Population data
 var map_data = {}; // Map paths
 var combined_data = []; // Array of data of countries in both our data sets
 
+// Scales
+var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range(0,500);
+var color_scale = d3.scaleLinear().domain([0, 500]).range([1, 0]);
+var x_scale = d3.scaleLinear().domain([1800, 2100]).range([0, 500]);
+var y_scale = d3.scaleLinear().domain([0, 500]).range([500, 0]);
+var reduce = d3.scaleLinear().domain([0, 500000000]).range([0, 500]);
 
 // OPEN DATA
 d3.csv("data/population.csv", function(table) {
@@ -115,7 +121,6 @@ d3.csv("data/population.csv", function(table) {
 
     }); // Close of json (then)
 
-
     // Create a timeline (1800 - 2100)
     var label = d3.select("svg").append("text")
             .attr("text-anchor", "middle")
@@ -178,9 +183,7 @@ d3.csv("data/population.csv", function(table) {
                 .style("border", "2px solid")
                 .style("visibility", "hidden");
 
-        var x_scale = d3.scaleLinear().domain([1800, 2100]).range([0, 500]);
-        var y_scale = d3.scaleLinear().domain([0, 500]).range([500, 0]);
-        var reduce = d3.scaleLinear().domain([0, 500000000]).range([0, 500]);
+
 
         // X-axis
         graph.append("g").call(d3.axisBottom().scale(x_scale).ticks(5))
@@ -204,8 +207,6 @@ d3.csv("data/population.csv", function(table) {
 
 
         // Plotting points
-        var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range(0,500);
-        var color_scale = d3.scaleLinear().domain([0, 500]).range([1, 0]);
         var year = 1800
         var y_label = graph.append("text").text(year).attr("transform", "translate(200, 100)");
         var timer = d3.interval(function(elapsed) {
