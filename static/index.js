@@ -181,7 +181,7 @@ d3.csv("data/population.csv", function(table) {
                 .style("position", "absolute")
                 .style("z-index", "10")
                 .style("border", "2px solid")
-                .style("visibility", "hidden");
+                .style("visibility", "visible");
 
 
 
