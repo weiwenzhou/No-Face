@@ -91,36 +91,39 @@ d3.csv("data/population.csv", function(table) {
                         .attr("fill", "#f2f2f2")
                         .on("mouseover", mouseover)
                         .on("click", function() {
-                          //highlight
-                          d3.select(this)
-                            .attr("stroke-width", "3");
-                          //zoom
-                          var bounds = this.getBBox();
-                          var x = bounds.x + bounds.width / 2;
-                          var y = bounds.y + bounds.height / 2;
-                          // svg.transition()
-                          //       .duration(750)
-                          //       .call(zoom.translate([0, 0]).scale(1).event);
+                            graph.style("visibility", "visible");
+                              //highlight
+                              d3.select(this)
+                                .attr("stroke-width", "3");
+                              //zoom
+                              var bounds = this.getBBox();
+                              var x = bounds.x + bounds.width / 2;
+                              var y = bounds.y + bounds.height / 2;
+                              // svg.transition()
+                              //       .duration(750)
+                              //       .call(zoom.translate([0, 0]).scale(1).event);
 
-                          //console.log("Country selected");
-                          if (lastSelected != this) {
-                            d3.select("body").select("svg").transition()
-                              .duration(750)
-                              .attr("transform", "translate(" + (WIDTH / 2 + -x + 250) + "," + (HEIGHT / 2 + -y + 100) + ")scale(" + 2 + ")");
-                            d3.select(lastSelected)
-                              .attr("stroke-width", "1");
-                            lastSelected = this;
-                            console.log("zoom in")
-                          }
-                          else {
-                            d3.select("body").select("svg").transition()
-                              .duration(750)
-                              .attr("transform", "translate(" + 0 + "," + 0 + ")scale(" + 1 + ")");
-                            d3.select(lastSelected)
-                              .attr("stroke-width", "1");
-                            lastSelected = null;
-                            console.log("zoom out")
-                          }
+                              //console.log("Country selected");
+                              if (lastSelected != this) {
+                                d3.select("body").select("svg").transition()
+                                  .duration(750)
+                                  .attr("transform", "translate(" + (WIDTH / 2 + -x + 250) + "," + (HEIGHT / 2 + -y + 100) + ")scale(" + 2 + ")");
+                                d3.select(lastSelected)
+                                  .attr("stroke-width", "1");
+                                lastSelected = this;
+                                console.log("zoom in")
+                              }
+                              else {
+                                d3.select("body").select("svg").transition()
+                                  .duration(750)
+                                  .attr("transform", "translate(" + 0 + "," + 0 + ")scale(" + 1 + ")");
+                                d3.select(lastSelected)
+                                  .attr("stroke-width", "1");
+                                lastSelected = null;
+                                console.log("zoom out")
+                                graph.style("visibility", "hidden");
+
+                              }
 
                           // d3.select("body").select("svg").append("circle")
                           //   .attr("cx", x.toString())
@@ -130,27 +133,81 @@ d3.csv("data/population.csv", function(table) {
                           //console.log(x.toString());
                           //console.log(y.toString());
                         })
-
+            var tooltips = countries
+        	.append("div")
+        	.style("position", "absolute")
+        	.style("z-index", "10")
+        	.style("visibility", "hidden")
+        	.style("background", "lightsteelblue")
+        	.style("padding", "2px")
+        	.style("border-radius", "10px")
     });
 
 
     // Create a timeline (1800 - 2100)
-    // var label = d3.select("svg").append("text")
-    //         .attr("text-anchor", "middle")
-    //         .attr("font-size", "40px")
-    //         .attr("x", 200)
-    //         .attr("y", 100)
-    //         .text("PLACEHOLDER YEAR");
+    var label = d3.select("svg").append("text")
+            .attr("text-anchor", "middle")
+            .attr("font-size", "10px")
+            .attr("x", 350)
+            .attr("y", 50)
+            .text("PLACEHOLDER YEAR");
 
+    // var timeline = map.append("g").call(d3.axisBottom()
+    //                 .scale([1800, 2100]).ticks(5));
+    //
+    // d3.select("svg").append(timeline)
+    //         .attr("x", 350)
+    //         .attr("y", 0);
     // Add title
 
 
+        //TEMP TOOLTIP
+        var tooltip = d3.select("body").selectAll("div").data(data).enter()
+    	.append("div")
+    	.style("position", "absolute")
+    	.style("z-index", "10")
+    	.style("visibility", "hidden")
+    	.style("background", "lightsteelblue")
+    	.style("padding", "2px")
+    	.style("border-radius", "10px")
+        .text("Population: " + data[0]['1800']);
+
     // Transition
+    var map_year = 1800;
+    var choropleth = d3.timer(function(elapsed) {
+        map.selectAll("path").attr("fill", function(d) {
+            return d3.interpolateSpectral(color_scale(reduce(d.population[map_year.toString()])));
+        })
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseout", mouseout);
 
+        map.selectAll("path").selectAll("div")
+        .text(function(d) {
+            return d.population[map_year.toString()];
+        })
+        label.text(map_year);
+        // if (map_year == 1800) {
+            // console.log(tooltip);
+        // }
+        tooltip.text(function(d) {
+            return d[map_year.toString()];
+        });
 
+        if (map_year >= 2100) {
+            choropleth.stop();
+        } else {
+            map_year = map_year + 1;
+        }
+    }, 5);
 
     // Temp Line graph
-    var graph = d3.select("body").append("svg").attr("width", 560).attr("height", 525).style("border", "2px solid");
+    var graph = d3.select("body")
+    .append("svg")
+    .attr("width", 560)
+    .attr("height", 525)
+    .style("border", "2px solid")
+    .style("visibility", "hidden");
 
     var x_scale = d3.scaleLinear().domain([1800, 2100]).range([0, 500]);
     var y_scale = d3.scaleLinear().domain([0, 500]).range([500, 0]);
@@ -193,15 +250,6 @@ d3.csv("data/population.csv", function(table) {
                                 });
         y_label.text(year);
 
-        map.selectAll("path").attr("fill", function(d) {
-            return d3.interpolateSpectral(color_scale(reduce(d.population[year.toString()])));
-        })
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseout", mouseout);
-
-
-
         d3.select("#US")
             .attr("style", "fill-rule:evenodd")
             .attr("fill", function(d) {
@@ -215,35 +263,23 @@ d3.csv("data/population.csv", function(table) {
         }
     }, 10);
 
-    //TEMP TOOLTIP
-    var tooltip = d3.select("body")
-	.append("div")
-	.style("position", "absolute")
-	.style("z-index", "10")
-	.style("visibility", "hidden")
-	.style("background", "lightsteelblue")
-	.style("padding", "2px")
-	.style("border-radius", "10px")
-	.text("Population: " + data[0][year.toString()]);
-
     d3.select("#US")
 	.on("mouseover", function(){return tooltip.style("visibility", "visible");})
 	.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
 	.on("mouseout", function(){return tooltip.style("visibility", "hidden");})
 
     var mouseover = function() {
-        console.log(this.__data__.population[year.toString()], year);
-        tooltip.style("visibility", "visible");
+        this.select("div").style("visibility", "visible");
     };
 
     var mousemove = function() {
-        tooltip.text(this.__data__.population[year.toString()])
+        this.select("div")
         .style("top", (event.pageY-10)+"px")
         .style("left",(event.pageX+10)+"px");
     };
 
     var mouseout = function() {
-        tooltip.style("visibility", "hidden");
+        this.select("div").style("visibility", "hidden");
     };
 
 });
