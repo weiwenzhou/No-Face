@@ -88,7 +88,7 @@ d3.csv("data/population.csv", function(table) {
                 if (lastSelected != this) {
                     d3.select("body").select("svg").transition()
                     .duration(750)
-                    .attr("transform", "translate(" + (WIDTH / 2 + -x + 250) + "," + (HEIGHT / 2 + -y + 100) + ")scale(" + 2 + ")");
+                    .attr("transform", "translate(" + (width / 2 + -x + 250) + "," + (height / 2 + -y + 100) + ")scale(" + 2 + ")");
                     d3.select(lastSelected)
                     .attr("stroke-width", "1");
                     lastSelected = this;
