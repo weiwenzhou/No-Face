@@ -86,7 +86,8 @@ d3.csv("data/population.csv", function(table) {
                     d3.select(lastSelected)
                     .attr("stroke-width", "1");
                     lastSelected = this;
-                    console.log("zoom in")
+                    selected = d3.select(this).attr("id");
+                    console.log("zoom in on "+ selected);
                 }
                 else {
                     d3.select("body").select("svg").transition()
@@ -95,6 +96,7 @@ d3.csv("data/population.csv", function(table) {
                     d3.select(lastSelected)
                     .attr("stroke-width", "1");
                     lastSelected = null;
+                    selected = null;
                     console.log("zoom out")
                     graph.style("visibility", "hidden");
                 }
@@ -170,12 +172,12 @@ d3.csv("data/population.csv", function(table) {
     // Temp Line graph
     var graph = d3.select("body")
     .append("svg")
-    .attr("width", 560)
-    .attr("height", 525)
-    .style("position", "absolute")
-    .style("z-index", "10")
+    .attr("width", 600) //560
+    .attr("height", 575) //525
     .style("border", "2px solid")
-    .style("visibility", "hidden");
+    .style("visibility", "hidden")
+    .style("padding-top", "10px")
+    .style("margin-top", "400px");
 
     var x_scale = d3.scaleLinear().domain([1800, 2100]).range([0, 500]);
     var y_scale = d3.scaleLinear().domain([0, 500]).range([500, 0]);
