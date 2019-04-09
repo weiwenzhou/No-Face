@@ -1,17 +1,56 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8">
-		<title>Population of Countries</title>
-<h1>Population of Countries from 1800 to 2100</h1>
-	</head>
-	<body>
+  <head>
+    <style>
+      .slidecontainer {
+	  width: 100%;
+      }
 
-	</body>
-	<footer>
-		<script src="http://d3js.org/d3.v5.min.js"></script>
-		<!-- For sliders -->
-		<!-- <script src="https://unpkg.com/d3-simple-slider"></script> -->
-		<script src="../static/index.js"></script>
-	</footer>
+      .slider {
+	  -webkit-appearance: none;
+	  width: 80%;
+	  height: 25px;
+	  background: #d3d3d3;
+	  outline: none;
+	  opacity: 0.7;
+	  -webkit-transition: .2s;
+	  transition: opacity .2s;
+      }
+
+      .slider:hover {
+	  opacity: 1;
+      }
+
+      .slider::-webkit-slider-thumb {
+	  -webkit-appearance: none;
+	  appearance: none;
+	  width: 25px;
+	  height: 25px;
+	  background: #4CAF50;
+	  cursor: pointer;
+      }
+
+      .slider::-moz-range-thumb {
+	  width: 25px;
+	  height: 25px;
+	  background: #4CAF50;
+	  cursor: pointer;
+      }
+    </style>
+    <meta charset="UTF-8">
+    <title>Population of Countries</title>
+    <h1>Population of Countries from 1800 to 2100</h1>
+  </head>
+  <body>
+    <div class="slidecontainer">
+      <p id="slider_val">1800</p>  
+      <input type="range" min="1800" max="2100" value="1801" class="slider" id="slider" oninput="document.getElementById('slider_val').innerHTML = this.value"></input>
+    </div>
+  </body>
+  <footer>
+    <script src="http://d3js.org/d3.v5.min.js"></script>
+    <!-- For sliders -->
+    <!-- <script src="https://unpkg.com/d3-simple-slider"></script> -->
+    <script src="../static/index.js"></script>
+  </footer>
 </html>
