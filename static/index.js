@@ -265,15 +265,17 @@ d3.csv("data/population.csv", function(table) {
 
     var time_input = d3.select("body")
         .append("input")
+        .attr("id", "time_input")
         .attr("type", "number")
         .attr("min", "1800")
         .attr("max", "2100")
         .attr("step", "10")
         .attr("value", "1800")
-        .on('onchange', function() {
-            console.log(this.value);
-        })
 
+    d3.select("#time_input").on("change", function() {
+      map_year = +this.value;
+      label.text(map_year);
+    });
 
     var pause = d3.select("body")
         .append("button")
