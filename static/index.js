@@ -18,6 +18,7 @@ var combined_data = []; // Array of data of countries in both our data sets
 
 // Timers
 var choropleth;
+var timer;
 
 // Scales
 var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range([0,500]);
@@ -87,6 +88,8 @@ d3.csv("data/population.csv", function(table) {
                 var x = bounds.x + bounds.width / 2;
                 var y = bounds.y + bounds.height / 2;
 
+
+
                 if (lastSelected != this) {
                     d3.select("body").select("svg").transition()
                     .duration(750)
@@ -108,7 +111,9 @@ d3.csv("data/population.csv", function(table) {
                     lastSelected = null;
                     console.log("zoom out")
 
+                    // Create new graph
                     graph.remove();
+                    timer.stop();
                     d3.timerFlush();
                 }
             }); // Close of click
@@ -181,6 +186,10 @@ d3.csv("data/population.csv", function(table) {
 
     // Scatter plot of a country's population change
     var create_graph = function(graph_data) {
+        if (graph) {
+            graph.remove();
+            timer.stop();
+        }
         graph = d3.select("body")
                 .append("svg")
                 .attr("width", 560)
@@ -210,7 +219,7 @@ d3.csv("data/population.csv", function(table) {
             .text("Population (millions)");
 
         // Title
-        graph.append("text").text("Population for the U.S. from 1800-2100").attr("transform", "translate(200, 50)");
+        graph.append("text").text("Population for the "+ graph_data['name'] + " from 1800-2100").attr("transform", "translate(200, 50)");
 
 
         // Plotting points
@@ -223,9 +232,7 @@ d3.csv("data/population.csv", function(table) {
                 .attr("cy", function(d) { return y_scale(pop_reduce(graph_data[year.toString()]));})
                 .attr("transform", "translate(60, 0)")
                 .attr("r", 1)
-                .attr("fill", function(d) {
-                    return d3.interpolateGreens(color_scale(pop_reduce(graph_data[year.toString()])));
-                });
+                .attr("fill", "black");
 
             if (year == map_year) {
                 point.attr("r", 3).attr("fill", "red");
