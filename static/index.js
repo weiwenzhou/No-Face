@@ -21,7 +21,7 @@ var choropleth;
 var timer;
 
 // Scales
-var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range([0,500]);
+var pop_reduce = d3.scaleLinear().domain([0, 2000000000]).range([0,2000]);
 var color_scale = d3.scaleLinear().domain([0, 500]).range([1, 0]);
 var x_scale = d3.scaleLinear().domain([1800, 2100]).range([0, 500]);
 var y_scale = d3.scaleLinear().domain([0, 2000]).range([500, 0]);
@@ -205,14 +205,14 @@ d3.csv("data/population.csv", function(table) {
         graph.append("g").call(d3.axisBottom().scale(x_scale).ticks(5))
             .attr("transform", "translate(60, 500)");
         // X Label
-        graph.append("text").text("Year")
+        graph.append("g").append("text").text("Year")
             .attr("transform", "translate(250, 520)");
 
         // Y-axis
         graph.append("g").call(d3.axisLeft().scale(y_scale).ticks(5))
             .attr("transform", "translate(60, 0)");
         // Y Label
-        graph.append("text")
+        graph.append("g").append("text")
             .attr("transform", "rotate(-90)")
             .attr("x", -320)
             .attr("y", 15)
@@ -245,7 +245,7 @@ d3.csv("data/population.csv", function(table) {
             } else {
                 year = year + 1;
             }
-        }, 100);
+        }, 5);
     }
 
     var mouseover = function() {
