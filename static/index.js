@@ -170,17 +170,10 @@ d3.csv("data/population.csv", function(table) {
                 return d3.interpolateSpectral(color_scale(reduce(d.population[map_year.toString()])));
             });
 
-            // map.selectAll("path").selectAll("div")
-            // .text(function(d) {
-            //     return d.population[map_year.toString()];
-            // })
+            // Label
             label.text(map_year);
-            // if (map_year == 1800) {
-                // console.log(tooltip);
-            // }
-            // tooltip.text(function(d) {
-            //     return d[map_year.toString()];
-            // });
+            // Slider
+            d3.select("#slider").attr("value", map_year);
 
             if (map_year >= 2100) {
                 choropleth.stop();
