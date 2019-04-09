@@ -114,10 +114,13 @@ d3.csv("data/population.csv", function(table) {
                     // Create new graph
                     graph.remove();
                     timer.stop();
-                    d3.timerFlush();
+                    mapTimer();
                 }
             }); // Close of click
 
+    // Start the color
+    mapTimer();
+    
     // Create the tooltips for each country
     var tooltips = countries
     	.append("div")
@@ -157,32 +160,34 @@ d3.csv("data/population.csv", function(table) {
 
     // Transition
     var map_year = 1800;
-    choropleth = d3.timer(function(elapsed) {
-        map.selectAll("path").attr("fill", function(d) {
-            return d3.interpolateSpectral(color_scale(reduce(d.population[map_year.toString()])));
-        })
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseout", mouseout);
+    var mapTimer = function() {
+        choropleth = d3.timer(function(elapsed) {
+            map.selectAll("path").attr("fill", function(d) {
+                return d3.interpolateSpectral(color_scale(reduce(d.population[map_year.toString()])));
+            })
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseout", mouseout);
 
-        // map.selectAll("path").selectAll("div")
-        // .text(function(d) {
-        //     return d.population[map_year.toString()];
-        // })
-        label.text(map_year);
-        // if (map_year == 1800) {
-            // console.log(tooltip);
-        // }
-        // tooltip.text(function(d) {
-        //     return d[map_year.toString()];
-        // });
+            // map.selectAll("path").selectAll("div")
+            // .text(function(d) {
+            //     return d.population[map_year.toString()];
+            // })
+            label.text(map_year);
+            // if (map_year == 1800) {
+                // console.log(tooltip);
+            // }
+            // tooltip.text(function(d) {
+            //     return d[map_year.toString()];
+            // });
 
-        if (map_year >= 2100) {
-            choropleth.stop();
-        } else {
-            map_year = map_year + 1;
-        }
-    }, 5);
+            if (map_year >= 2100) {
+                choropleth.stop();
+            } else {
+                map_year = map_year + 1;
+            }
+        }, 5);
+    }
 
     // Scatter plot of a country's population change
     var create_graph = function(graph_data) {
