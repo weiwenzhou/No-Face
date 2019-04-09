@@ -90,13 +90,17 @@ d3.csv("data/population.csv", function(table) {
                 var bounds = this.getBBox();
                 var x = bounds.x + bounds.width / 2;
                 var y = bounds.y + bounds.height / 2;
-
+                var extrax, extray;
+                if (x > 500) {extrax = -250;}
+                else {extrax = 250;}
+                if (y > 200) {extray = -100;}
+                else {extray = 100;}
 
 
                 if (lastSelected != this) {
                     d3.select("body").select("svg").transition()
                     .duration(750)
-                    .attr("transform", "translate(" + (width / 2 + -x + 250) + "," + (height / 2 + -y + 100) + ")scale(" + 2 + ")");
+                    .attr("transform", "translate(" + (width / 2 + -x + extrax) + "," + (height / 2 + -y + extray) + ")scale(" + 2 + ")");
                     d3.select(lastSelected)
                     .attr("stroke-width", "1");
                     lastSelected = this;
