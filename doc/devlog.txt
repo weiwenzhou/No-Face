@@ -77,6 +77,7 @@ stefanT -- 2019-04-04 23:43
 --------------------------------------------------------------
 - Added a work in progress tooltip to display data
 ==============================================================
+<<<<<<< HEAD
 weiwenZ -- 2019-04-05 13:50
 --------------------------------------------------------------
 - Got choropleth map working
@@ -92,4 +93,10 @@ weiwenZ -- 2019-04-08 21:30
 - Got the graph to work
 - Timers stop and restart after graph zoom in and out
 - Time control done
+=======
+stefanT -- 2019-04-08 21:32
+--------------------------------------------------------------
+- Finalized the tooltip
+- Added final touches to the app
+>>>>>>> 2fa91902529c68a3a4d896544be2ff2e811773f2
 ==============================================================
