@@ -284,8 +284,8 @@ d3.csv("data/population.csv", function(table) {
     // Mouse functions
     var mouseover = function() {
         // d3.select(this)
-        tooltip
-        .select("div").style("visibility", "visible");
+        console.log(this.__data__.population[map_year.toString()], map_year);
+        tooltip.style("visibility", "visible");
     };
 
     var mousemove = function() {
