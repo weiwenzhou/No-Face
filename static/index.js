@@ -5,7 +5,8 @@ var width = 900.0;
 var height = 440.0;
 var margin; // dictionary
 var map;
-var graph
+var graph;
+var tooltip;
 var lastSelected; //last selected country
 var selected; //current selected country
 
@@ -75,6 +76,8 @@ d3.csv("data/population.csv", function(table) {
             .attr("stroke", "#f2f2f2")
             .attr("fill", "#f2f2f2")
             .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseout", mouseout)
             .on("click", function() {
                 // Make line graph visible
 
@@ -120,19 +123,19 @@ d3.csv("data/population.csv", function(table) {
 
     // Start the color
     mapTimer();
-    
+
     // Create the tooltips for each country
     var tooltips = countries
     	.append("div")
     	.style("position", "absolute")
-    	.style("z-index", "10")
+    	.style("z-index", "100")
     	.style("visibility", "hidden")
     	.style("background", "lightsteelblue")
     	.style("padding", "2px")
     	.style("border-radius", "10px")
         .text("STUFF");
 
-        console.log(tooltips);
+        // console.log(tooltips);
 
     }); // Close of json (then)
 
@@ -147,8 +150,8 @@ d3.csv("data/population.csv", function(table) {
     // Add title
 
     data = [population['United States']]
-    //TEMP TOOLTIP
-    var tooltip = d3.select("body").selectAll("div").data(data).enter()
+    // TOOLTIP
+    tooltip = d3.select("body")
     	.append("div")
     	.style("position", "absolute")
     	.style("z-index", "10")
@@ -156,7 +159,8 @@ d3.csv("data/population.csv", function(table) {
     	.style("background", "lightsteelblue")
     	.style("padding", "2px")
     	.style("border-radius", "10px")
-        .text("Population: " + data[0]['1800']);
+    	.text("Population: ");
+
 
     // Transition
     var map_year = 1800;
@@ -164,10 +168,7 @@ d3.csv("data/population.csv", function(table) {
         choropleth = d3.timer(function(elapsed) {
             map.selectAll("path").attr("fill", function(d) {
                 return d3.interpolateSpectral(color_scale(reduce(d.population[map_year.toString()])));
-            })
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseout", mouseout);
+            });
 
             // map.selectAll("path").selectAll("div")
             // .text(function(d) {
@@ -186,7 +187,7 @@ d3.csv("data/population.csv", function(table) {
             } else {
                 map_year = map_year + 1;
             }
-        }, 5);
+        }, 100);
     }
 
     // Scatter plot of a country's population change
@@ -253,19 +254,60 @@ d3.csv("data/population.csv", function(table) {
         }, 5);
     }
 
+    // Time buttons
+    d3.select("body").append("br");
+    var reset = d3.select("body")
+        .append("button")
+        .on('click', function() {
+            map_year = 1800;
+        })
+        .text("Reset timeline");
+
+    var time_input = d3.select("body")
+        .append("input")
+        .attr("type", "number")
+        .attr("min", "1800")
+        .attr("max", "2100")
+        .attr("step", "10")
+        .attr("value", "1800")
+        .on('onchange', function() {
+            console.log(this.value);
+        })
+
+
+    var pause = d3.select("body")
+        .append("button")
+        .on('click', function() {
+            choropleth.stop();
+        })
+        .text("Pause");
+
+    var start = d3.select("body")
+        .append("button")
+        .on('click', function() {
+            mapTimer();
+        })
+        .text("Resume");
+    // Mouse functions
     var mouseover = function() {
-        d3.select(this).select("div").style("visibility", "visible");
+        // d3.select(this)
+        tooltip
+        .select("div").style("visibility", "visible");
     };
 
     var mousemove = function() {
         console.log("HERE");
-        d3.select(this).select("div")
+        // d3.select(this).select("div")
+        tooltip
+        .text(this.__data__.population[map_year.toString()])
         .style("top", (event.pageY-10)+"px")
         .style("left",(event.pageX+10)+"px");
     };
 
     var mouseout = function() {
-        d3.select(this).select("div").style("visibility", "hidden");
+        // d3.select(this).select("div")
+        tooltip
+        .style("visibility", "hidden");
     };
 
 });
