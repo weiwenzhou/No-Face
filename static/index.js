@@ -170,17 +170,11 @@ d3.csv("data/population.csv", function(table) {
                 return d3.interpolateSpectral(color_scale(reduce(d.population[map_year.toString()])));
             });
 
-            // map.selectAll("path").selectAll("div")
-            // .text(function(d) {
-            //     return d.population[map_year.toString()];
-            // })
+            // Label
             label.text(map_year);
-            // if (map_year == 1800) {
-                // console.log(tooltip);
-            // }
-            // tooltip.text(function(d) {
-            //     return d[map_year.toString()];
-            // });
+            // Slider
+            d3.select("#slider").attr("value", map_year.toString());
+            d3.select("#slider_val").attr("value", map_year.toString()).text(map_year);
 
             if (map_year >= 2100) {
                 choropleth.stop();
@@ -255,32 +249,26 @@ d3.csv("data/population.csv", function(table) {
     }
 
     // Time buttons
-    d3.select("body").append("br");
-    var reset = d3.select("body")
-        .append("button")
+    var reset = d3.select("#reset")
         .on('click', function() {
             map_year = 1800;
         })
-        .text("Reset timeline");
 
     d3.select("#slider").on("change", function() {
       map_year = +this.value;
       label.text(map_year);
     });
 
-    var pause = d3.select("body")
-        .append("button")
+    var pause = d3.select("#pause")
         .on('click', function() {
             choropleth.stop();
         })
-        .text("Pause");
 
-    var start = d3.select("body")
-        .append("button")
+    var start = d3.select("#resume")
         .on('click', function() {
             mapTimer();
         })
-        .text("Resume");
+
     // Mouse functions
     var mouseover = function() {
         // d3.select(this)
