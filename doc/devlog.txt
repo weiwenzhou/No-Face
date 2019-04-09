@@ -93,6 +93,12 @@ weiwenZ -- 2019-04-08 21:30
 - Got the graph to work
 - Timers stop and restart after graph zoom in and out
 - Time control done
+=======
+stefanT -- 2019-04-08 21:32
+--------------------------------------------------------------
+- Finalized the tooltip
+- Added final touches to the app
+>>>>>>> 2fa91902529c68a3a4d896544be2ff2e811773f2
 ==============================================================
 stefanT -- 2019-04-08 21:32
 --------------------------------------------------------------
