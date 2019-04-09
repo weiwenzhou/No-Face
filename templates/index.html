@@ -43,9 +43,12 @@
   </head>
   <body>
     <div class="slidecontainer">
-      <p id="slider_val">1800</p>  
+      <p id="slider_val">1800</p>
       <input type="range" min="1800" max="2100" value="1801" class="slider" id="slider" oninput="document.getElementById('slider_val').innerHTML = this.value"></input>
     </div>
+	<button id="resume"> Resume </button>
+	<button id="pause"> Pause </button>
+	<button id="reset"> Reset </button>
   </body>
   <footer>
     <script src="http://d3js.org/d3.v5.min.js"></script>

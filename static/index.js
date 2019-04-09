@@ -173,7 +173,7 @@ d3.csv("data/population.csv", function(table) {
             // Label
             label.text(map_year);
             // Slider
-            d3.select("#slider").attr("value", map_year);
+            d3.select("#slider_val").attr("value", map_year);
 
             if (map_year >= 2100) {
                 choropleth.stop();
@@ -248,32 +248,26 @@ d3.csv("data/population.csv", function(table) {
     }
 
     // Time buttons
-    d3.select("body").append("br");
-    var reset = d3.select("body")
-        .append("button")
+    var reset = d3.select("#reset")
         .on('click', function() {
             map_year = 1800;
         })
-        .text("Reset timeline");
 
     d3.select("#slider").on("change", function() {
       map_year = +this.value;
       label.text(map_year);
     });
 
-    var pause = d3.select("body")
-        .append("button")
+    var pause = d3.select("#pause")
         .on('click', function() {
             choropleth.stop();
         })
-        .text("Pause");
 
-    var start = d3.select("body")
-        .append("button")
+    var start = d3.select("#resume")
         .on('click', function() {
             mapTimer();
         })
-        .text("Resume");
+
     // Mouse functions
     var mouseover = function() {
         // d3.select(this)
