@@ -173,7 +173,8 @@ d3.csv("data/population.csv", function(table) {
             // Label
             label.text(map_year);
             // Slider
-            d3.select("#slider_val").attr("value", map_year);
+            d3.select("#slider").attr("value", map_year.toString());
+            d3.select("#slider_val").attr("value", map_year.toString()).text(map_year);
 
             if (map_year >= 2100) {
                 choropleth.stop();
