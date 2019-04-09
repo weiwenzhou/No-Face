@@ -120,7 +120,7 @@ d3.csv("data/population.csv", function(table) {
 
     // Start the color
     mapTimer();
-    
+
     // Create the tooltips for each country
     var tooltips = countries
     	.append("div")
@@ -253,19 +253,34 @@ d3.csv("data/population.csv", function(table) {
         }, 5);
     }
 
+    // var mouseover = function() {
+    //     d3.select(this).select("div").style("visibility", "visible");
+    // };
+    //
+    // var mousemove = function() {
+    //     console.log("HERE");
+    //     d3.select(this).select("div")
+    //     .style("top", (event.pageY-10)+"px")
+    //     .style("left",(event.pageX+10)+"px");
+    // };
+    //
+    // var mouseout = function() {
+    //     d3.select(this).select("div").style("visibility", "hidden");
+    // };
+    
     var mouseover = function() {
-        d3.select(this).select("div").style("visibility", "visible");
+        console.log(this.__data__.population[map_year.toString()], map_year);
+        tooltip.style("visibility", "visible");
     };
 
     var mousemove = function() {
-        console.log("HERE");
-        d3.select(this).select("div")
+        tooltip.text(this.__data__.population[map_year.toString()])
         .style("top", (event.pageY-10)+"px")
         .style("left",(event.pageX+10)+"px");
     };
 
     var mouseout = function() {
-        d3.select(this).select("div").style("visibility", "hidden");
-    };
+        tooltip.style("visibility", "hidden");
+};
 
 });
